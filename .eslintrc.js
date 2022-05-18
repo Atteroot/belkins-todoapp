@@ -2,7 +2,12 @@ module.exports = {
   env: {
     node: true,
   },
-  parser: "@typescript-eslint/parser",
+  parser: [
+    "vue-eslint-parser"
+  ],
+  parserOptions: [
+    "@typescript-eslint/parser"
+  ],
   plugins: [
     "@typescript-eslint"
   ],
