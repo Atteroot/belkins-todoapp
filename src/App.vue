@@ -4,18 +4,42 @@
       <span class="header__text">To-do list</span>
     </header>
 
-    <form action="" class="add-task">
-      <input id="add-task" type="text" name="" class="add-task__input" placeholder="Add a task"/>
+    <form
+      autocomplete="off"
+      class="add-task"
+      @submit.prevent
+    >
+      <input
+        id="add-task"
+        v-model="newTask"
+        type="text"
+        class="add-task__input"
+        placeholder="Add a task"
+        v-on:keydown.enter="addTask" 
+      />
     </form>
 
     <section class="active-tasks">
-      <div v-for="task in tasks" :key="task.id" class="active-tasks__task task">
+      <div
+        v-for="task in progressOfTasks('uncompleted')"
+        :key="task.id"
+        class="active-tasks__task task"
+      >
         <div class="task__desc desc">
-          <img src="./icons/task-uncompleted.svg" alt="" class="desc__check">
-          <span class="desc__name">{{ task.task }}</span>
+          <img
+            src="./icons/task-uncompleted.svg"
+            class="desc__check"
+            @click="completeTask(task)"
+          />
+          <input
+            :value="task.task"
+            v-on:keypress.enter="saveTask(task)"
+            class="desc__name"
+            @input="this.editedTask = $event.target.value"
+          />
         </div>
-        <button class="active-tasks__delete-button">
-          <img src="./icons/cross.svg" alt="" />
+        <button class="active-tasks__delete-button" @click="deleteTask(task)">
+          <img src="./icons/cross.svg"/>
         </button>
       </div>
     </section>
@@ -28,13 +52,21 @@
     </div>
 
     <section class="completed-tasks">
-      <div v-for="task in completedTasks" :key="task.id" class="completed-tasks__task task">
+      <div
+        v-for="task in progressOfTasks('completed')"
+        :key="task.id"
+        class="completed-tasks__task task"
+      >
         <div class="task__desc desc">
-          <img src="./icons/task-completed.svg" class="desc__check">
+          <img
+            src="./icons/task-completed.svg"
+            class="desc__check"
+            @click="completeTask(task)"
+          />
           <span class="desc__name desc__name--completed">{{ task.task }}</span>
         </div>
         <button class="active-tasks__delete-button">
-          <img src="./icons/cross.svg" alt="" />
+          <img src="./icons/cross.svg" @click="deleteTask(task)"/>
         </button>
       </div>
     </section>
@@ -48,28 +80,74 @@ export default defineComponent({
   components: {},
   data() {
     return {
+      newTask: '',
+      editedTask: '',
       tasks: [
+        // {
+        //   id: 1,
+        //   task: "Hello first task",
+        //   completed: false
+        // },
+        // {
+        //   id: 2,
+        //   task: "Hello second task",
+        //   completed: false
+        // },
+        // {
+        //   id: 3,
+        //   task: "Hello first completed task",
+        //   completed: true
+        // },
+        // {
+        //   id: 4,
+        //   task: "Hello second completed task",
+        //   completed: true
+        // },
         {
-          id: Date.now(),
-          task: "Hello first task"
+          id: 1,
+          task: "",
+          completed: false
         },
-        {
-          id: Date.now(),
-          task: "Hello second task"
-        }
-      ],
-      completedTasks: [
-        {
-          id: Date.now(),
-          task: "Hello first completed task"
-        },
-        {
-          id: Date.now(),
-          task: "Hello second completed task"
-        }
       ],
     };
   },
+
+  methods: {
+    addTask(): void {
+      this.tasks.unshift({
+        id: Date.now(),
+        task: this.newTask,
+        completed: false
+      });
+      this.newTask = '';
+    },
+
+    progressOfTasks(status: string) {
+      if (this.tasks.length > 1) {
+        if (status == 'uncompleted') {
+          return this.tasks.filter(el => !el.completed)
+        } else {
+          return this.tasks.filter(el => el.completed)
+        }
+      }
+      
+    },
+
+    deleteTask(task: {id: number, task: string}): void {
+      this.tasks = this.tasks.filter(el => el.id !== task.id)
+    },
+
+    completeTask(task): void {
+      task.completed = !task.completed
+    },
+
+    saveTask(task): void {
+      const taskId = this.tasks.findIndex(el => el.id === task.id)
+      console.log(taskId);
+      
+      this.tasks[taskId].task = this.editedTask
+    }
+  }
 })
 
 </script>
@@ -108,6 +186,8 @@ html
 
 .add-task
   width: 100%
+
+  autocomplete: off
 
   &__input
     width: 100%
@@ -150,12 +230,23 @@ html
   display: flex
   align-items: center
 
+  width: 100%
+
   &__check
     margin: 20px
 
     cursor: pointer
 
   &__name
+    width: 100%
+
+    border: none
+    background-color: #383A4C
+
+    color: white
+
+    font-weight: 500
+    font-size: 16px
     &--completed
       color: #9799AD
       text-decoration-line: line-through
