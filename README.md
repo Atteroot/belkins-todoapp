@@ -1,7 +1,7 @@
 # Vue 3 + TypeScript + Vite
 
 ## Preview: https://atteroot.github.io/belkins-todoapp/
-## [Server (Nest.js)](https://github.com/Atteroot/belkins-todoapp/tree/server)
+[Server (Nest.js)](https://github.com/Atteroot/belkins-todoapp/tree/server)
 
 
 ## Recommended IDE Setup
