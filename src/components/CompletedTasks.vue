@@ -1,5 +1,5 @@
 <template>
-  <div class="completed-icon" v-if="filterComplitedTasks().length > 0">
+  <div class="completed-icon" v-if="filterComplitedTasks().length">
       <img src="../icons/completed-check.svg" class="completed-icon__icon">
       <span class="completed-icon__text">Completed</span>
     </div>

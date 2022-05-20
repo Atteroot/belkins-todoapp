@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
 
 interface Task {
-  id: number,
+  _id: string,
   task: string,
   completed: boolean
 }
+
+const url = 'http://localhost:8000/tasks';
 
 export const useTasksStore = defineStore({
   id: 'tasks',
@@ -14,27 +16,36 @@ export const useTasksStore = defineStore({
   }),
 
   actions: {
-    addTask(task: string): number {
-      return this.allTasks.unshift({
-        id: Date.now() as number,
-        task: task,
-        completed: false
-      })
+    fetchTasks() {
+      fetch(url)
+        .then(res => res.json())
+        .then(data => this.allTasks = data.reverse())
     },
 
-    removeTask(task: Task) {
-      const taskId: number = this.allTasks.lastIndexOf(task)
-      if(taskId > -1) this.allTasks.splice(taskId, 1)
+    addTask(task: string): void {
+      const data = {
+        task: task,
+        completed: false
+      }
+
+      fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        }
+      ).then(res => this.fetchTasks())
+    },
+
+    removeTask(task: Task): void {
+      fetch(`${url}/${task._id}`, {
+        method: 'DELETE'
+      }).then(res => this.fetchTasks())
     },
 
     completeTask(task: Task) {
-      task.completed = !task.completed
+      fetch(`${url}/status/${task._id}`, {
+        method: 'PATCH'
+      }).then(res => this.fetchTasks())
     },
-
-    renameTask(task: Task, editedTask: string) {
-      const taskId: number = this.allTasks.lastIndexOf(task)
-
-      return this.allTasks[taskId].task = editedTask
-    }
   }
 })

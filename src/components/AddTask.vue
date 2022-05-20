@@ -10,7 +10,6 @@
       type="text"
       class="add-task__input"
       placeholder="Add a task"
-
     />
   </form>
 </template>
@@ -45,6 +44,9 @@ export default defineComponent({
 
   autocomplete: off
 
+  &:focus
+    color: #535568
+
   &__input
     width: 100%
     margin-top: 30px
@@ -57,4 +59,7 @@ export default defineComponent({
 
     font-weight: 400
     color: #7A7C8D
+
+    &:focus
+      color: #535568
 </style>

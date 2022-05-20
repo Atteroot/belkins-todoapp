@@ -3,7 +3,6 @@
     <header class="header">
       <span class="header__text">To-do list</span>
     </header>
-
     <add-task></add-task>
     <active-tasks></active-tasks>
     <div class="divider"></div>
@@ -31,6 +30,10 @@ export default defineComponent({
   components: {
     AddTask, ActiveTasks, CompletedTasks
   },
+
+  beforeCreate() {
+    this.tasksStore.fetchTasks();
+  }
 })
 
 </script>
