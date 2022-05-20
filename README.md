@@ -2,6 +2,7 @@
 
 ## Preview: https://atteroot.github.io/belkins-todoapp/
 [Server (Nest.js)](https://github.com/Atteroot/belkins-todoapp/tree/server)
+Stack: Vue3, Typescript, Pinia, Vite, SCSS(SASS), Node.js, Nest.js, MongoDB
 
 
 ## Recommended IDE Setup
