@@ -11,13 +11,10 @@ const login = process.env.DB_USERNAME;
 const password = process.env.DB_PASSWORD;
 const cluster = process.env.DB_CLUSTER;
 
+const uri = process.env.MONGODB_URI;
+
 @Module({
-  imports: [
-    MongooseModule.forRoot(
-      `mongodb+srv://${login}:${password}@${cluster}.pea6o.mongodb.net/allTasks?retryWrites=true&w=majority`,
-    ),
-    TasksModule,
-  ],
+  imports: [MongooseModule.forRoot(`${uri}`), TasksModule],
   controllers: [AppController],
   providers: [AppService],
 })
