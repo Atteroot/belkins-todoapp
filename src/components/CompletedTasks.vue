@@ -40,7 +40,7 @@ export default defineComponent({
 
   methods: {
     filterComplitedTasks() {
-      return this.tasksStore.allTasks.filter(el => el.completed)
+      return this.tasksStore.allTasks.filter((el: any) => el.completed)
     }
   }
 })

@@ -13,10 +13,10 @@
         />
         <input
           :value="task.task"
-          v-on:keypress.enter="this.renameTask(task, this.editedTask)"
+          v-on:keypress.enter="(this as any).renameTask(task, (this as any).editedTask)"
           class="desc__name"
-          @input="this.editedTask = $event.target.value"
-          @focusout="this.renameTask(task, this.editedTask)"
+          @input="(this as any).editedTask = ($event.target as HTMLTextAreaElement).value"
+          @focusout="(this as any).renameTask(task, (this as any).editedTask)"
         />
       </div>
       <button class="active-tasks__delete-button" @click="tasksStore.removeTask(task)">
@@ -41,7 +41,7 @@ interface Task {
 export default defineComponent({
   setup() {
     const tasksStore = useTasksStore();
-    const editedTask = ref('');
+    const editedTask: any = ref('');
 
     return {
       tasksStore,
@@ -50,11 +50,11 @@ export default defineComponent({
   },
 
   methods: {
-    filterUncomplitedTasks() {
-      return this.tasksStore.allTasks.filter(el => !el.completed)
+    filterUncomplitedTasks(): Array<Task>{
+      return this.tasksStore.allTasks.filter((el: any) => !el.completed)
     }, 
 
-    renameTask(task: Task, editedTask: string) {
+    renameTask(task: Task, editedTask: string): void {
       if (editedTask.length) {
         fetch(`${url}/${task._id}`, {
           method: 'PUT',
@@ -69,7 +69,7 @@ export default defineComponent({
           }
         )
       }
-    }
+    },
   },
 })
 </script>

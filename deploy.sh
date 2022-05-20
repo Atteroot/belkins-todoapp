@@ -15,6 +15,6 @@ git add -A
 git commit -m 'deploy'
 
 
-git push --force git@github.com:Atteroot/lambda-testtask.git master:gh-pages
+git push --force git@github.com:Atteroot/belkins-todoapp.git master:gh-pages
 
 cd -
