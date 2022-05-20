@@ -30,7 +30,7 @@
 import { defineComponent, ref } from "vue";
 import { useTasksStore } from '../stores/tasks';
 
-const url = 'http://localhost:8000/tasks';
+const url = 'https://belkins-todo-app.herokuapp.com/tasks';
 
 interface Task {
   _id: string,

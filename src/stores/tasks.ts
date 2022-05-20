@@ -6,7 +6,7 @@ interface Task {
   completed: boolean
 }
 
-const url = 'http://localhost:8000/tasks';
+const url = 'https://belkins-todo-app.herokuapp.com/tasks';
 
 export const useTasksStore = defineStore({
   id: 'tasks',
