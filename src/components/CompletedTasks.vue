@@ -1,13 +1,14 @@
 <template>
-  <div class="completed-icon" v-if="filterComplitedTasks().length">
-      <img src="../icons/completed-check.svg" class="completed-icon__icon">
+  <div v-if="tasksExsists">
+    <div class="completed-icon">
+      <img src="../icons/completed-check.svg" class="completed-icon__icon" />
       <span class="completed-icon__text">Completed</span>
     </div>
 
     <section class="completed-tasks">
       <div
-        v-for="task in filterComplitedTasks()"
-        :key="task.id"
+        v-for="task in complitedTasks"
+        :key="task._id"
         class="completed-tasks__task task"
       >
         <div class="task__desc desc">
@@ -19,35 +20,40 @@
           <span class="desc__name desc__name--completed">{{ task.task }}</span>
         </div>
         <button class="active-tasks__delete-button">
-          <img src="../icons/cross.svg" @click="tasksStore.removeTask(task)"/>
+          <img src="../icons/cross.svg" @click="tasksStore.removeTask(task)" />
         </button>
       </div>
     </section>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useTasksStore } from '../stores/tasks';
+import { Task, useTasksStore } from "../stores/tasks";
 
 export default defineComponent({
   setup() {
-    const tasksStore = useTasksStore()
+    const tasksStore = useTasksStore();
 
     return {
-      tasksStore
-    }
+      tasksStore,
+    };
   },
 
-  methods: {
-    filterComplitedTasks() {
-      return this.tasksStore.allTasks.filter((el: any) => el.completed)
-    }
-  }
-})
+  computed: {
+    complitedTasks(): Task[] {
+      return this.tasksStore.allTasks.filter((el: any) => el.completed);
+    },
+
+    tasksExsists(): boolean {
+      return !!this.complitedTasks.length;
+    },
+  },
+});
 </script>
 
 <style lang="sass">
-.completed-icon 
+.completed-icon
   padding: 6px 8px
   margin-top: 20px
   margin-bottom: 10px

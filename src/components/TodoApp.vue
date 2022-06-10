@@ -11,31 +11,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
-import { useTasksStore } from '../stores/tasks'
+import { defineComponent } from "vue";
+import { useTasksStore } from "../stores/tasks";
 
-import AddTask from './AddTask.vue'
-import ActiveTasks from './ActiveTasks.vue'
-import CompletedTasks from './CompletedTasks.vue'
+import AddTask from "./AddTask.vue";
+import ActiveTasks from "./ActiveTasks.vue";
+import CompletedTasks from "./CompletedTasks.vue";
 
 export default defineComponent({
   setup() {
-    const tasksStore = useTasksStore()
+    const tasksStore = useTasksStore();
 
     return {
-      tasksStore
-    }
+      tasksStore,
+    };
   },
 
   components: {
-    AddTask, ActiveTasks, CompletedTasks
+    AddTask,
+    ActiveTasks,
+    CompletedTasks,
   },
 
   beforeCreate() {
     this.tasksStore.fetchTasks();
-  }
-})
-
+  },
+});
 </script>
 
 <style lang="sass">

@@ -1,51 +1,60 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-interface Task {
-  _id: string,
-  task: string,
-  completed: boolean
+export interface Task {
+  _id: string;
+  task: string;
+  completed: boolean;
 }
 
-const url = 'https://belkins-todo-app.herokuapp.com/tasks';
+export const url = "https://belkins-todo-app.herokuapp.com/tasks";
 
 export const useTasksStore = defineStore({
-  id: 'tasks',
+  id: "tasks",
 
   state: () => ({
-    allTasks: [] as any,
+    allTasks: [] as Task[],
   }),
 
   actions: {
-    fetchTasks() {
-      fetch(url)
-        .then(res => res.json())
-        .then(data => this.allTasks = data.reverse())
+    async fetchTasks() {
+      return fetch(url)
+        .then((res) => res.json())
+        .then((data) => (this.allTasks = data.reverse()));
     },
 
-    addTask(task: string): void {
+    async addTask(task: string) {
       const data = {
         task: task,
-        completed: false
-      }
+        completed: false,
+      };
 
-      fetch(url, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(data)
-        }
-      ).then(res => this.fetchTasks())
+      return fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }).then((res) => this.fetchTasks());
     },
 
-    removeTask(task: Task): void {
-      fetch(`${url}/${task._id}`, {
-        method: 'DELETE'
-      }).then(res => this.fetchTasks())
+    editTask(task: Task, editTask: string) {
+      return fetch(`${url}/${task._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task: editTask }),
+      });
     },
 
-    completeTask(task: Task) {
-      fetch(`${url}/status/${task._id}`, {
-        method: 'PATCH'
-      }).then(res => this.fetchTasks())
+    async removeTask(task: Task) {
+      return fetch(`${url}/${task._id}`, {
+        method: "DELETE",
+      }).then((res) => this.fetchTasks());
     },
-  }
-})
+
+    async completeTask(task: Task) {
+      return fetch(`${url}/status/${task._id}`, {
+        method: "PATCH",
+      }).then((res) => this.fetchTasks());
+    },
+  },
+});

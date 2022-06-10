@@ -1,77 +1,30 @@
 <template>
   <section class="active-tasks">
-    <div
-      v-for="task in filterUncomplitedTasks()"
-      class="active-tasks__task task"
-      :key="task._id"
-    >
-      <div class="task__desc desc">
-        <img
-          src="../icons/task-uncompleted.svg"
-          class="desc__check"
-          @click="tasksStore.completeTask(task)"
-        />
-        <input
-          :value="task.task"
-          v-on:keypress.enter="(this as any).renameTask(task, (this as any).editedTask)"
-          class="desc__name"
-          @input="(this as any).editedTask = ($event.target as HTMLTextAreaElement).value"
-          @focusout="(this as any).renameTask(task, (this as any).editedTask)"
-        />
-      </div>
-      <button class="active-tasks__delete-button" @click="tasksStore.removeTask(task)">
-        <img src="../icons/cross.svg"/>
-      </button>
-    </div>
+    <Ttask v-for="task in uncomplitedTasks" :task="task" />
   </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { useTasksStore } from '../stores/tasks';
-
-const url = 'https://belkins-todo-app.herokuapp.com/tasks';
-
-interface Task {
-  _id: string,
-  task: string,
-  completed: boolean
-}
+import { useTasksStore, Task, url } from "../stores/tasks";
+import Ttask from "./Task.vue";
 
 export default defineComponent({
+  components: { Ttask },
   setup() {
     const tasksStore = useTasksStore();
-    const editedTask: any = ref('');
 
     return {
       tasksStore,
-      editedTask,
-    }
+    };
   },
 
-  methods: {
-    filterUncomplitedTasks(): Array<Task>{
-      return this.tasksStore.allTasks.filter((el: any) => !el.completed)
-    }, 
-
-    renameTask(task: Task, editedTask: string): void {
-      if (editedTask.length) {
-        fetch(`${url}/${task._id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ task: editedTask })
-        })
-        .then(res => {
-          this.tasksStore.fetchTasks();
-          this.editedTask = '';
-          }
-        )
-      }
+  computed: {
+    uncomplitedTasks(): Task[] {
+      return this.tasksStore.allTasks.filter((task) => !task.completed);
     },
   },
-})
+});
 </script>
 
 <style lang="sass">
